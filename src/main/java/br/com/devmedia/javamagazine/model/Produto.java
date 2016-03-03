@@ -3,21 +3,30 @@ package br.com.devmedia.javamagazine.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
+
+import br.com.devmedia.javamagazine.exception.ObjectNotFoundException;
 
 public class Produto {
 
 	@FormParam("codigo")
+	@NotNull
 	private String codigo;
 
 	@FormParam("nome")
+	@NotNull
 	private String nome;
 
 	@FormParam("preco")
+	@NotNull
+	@Min(0)
 	private Double preco;
 
 	@FormParam("descricao")
 	private String descricao;
+
 	private static List<Produto> lista = new ArrayList<Produto>();
 
 	static {
@@ -49,6 +58,10 @@ public class Produto {
 				result = produto;
 				break;
 			}
+		}
+
+		if (result == null) {
+			throw new ObjectNotFoundException();
 		}
 
 		return result;
